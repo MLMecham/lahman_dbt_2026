@@ -42,10 +42,18 @@ Stack: dbt Fusion + Snowflake. Seeds = Lahman 1871–2025 CSVs. Possible Streaml
 | `dim_award` | 1 | Distinct awards from award tables; player vs manager category. |
 | `dim_league` | 0 | lgID (3-char for Negro Leagues), league full name, classification (AL/NL/historical/Negro League/independent). |
 | `dim_school` + `bridge_player_school` | 0 | CollegePlaying M:M bridge. School renames (year-suffixed IDs like `illinoisst1857` → `illinoisst`) resolved with a **recursive CTE**; bridge carries both historical and current school keys. Data only through 2014. |
+| `dim_date` | 0 | Day grain, spine **1820-01-01 → 2026-01-01** (~75k rows; must predate 1871 to cover player births). Generate in-model via Snowflake `GENERATOR` (no package dependency) or `dbt_utils.date_spine`. **Role-playing**: birth/death/debut/final-game dates on dim_player (**date outriggers**), debut/final-game milestones on fct_player_career, span_first/span_last on fct_home_attendance. Roles = aliased joins (or thin views if Looker Studio needs named objects). |
 
-Date handling: `dim_season` (year grain) is the conformed time dimension; full dates
-(debut, final game, attendance spans) stay as degenerate date attributes — no day-grain
-dim_date unless the app needs one.
+Date handling: two grains, one source of truth. `dim_season` (year grain) is the conformed
+time dimension that **all facts** join to (Lahman is year-grain throughout); `dim_date`
+(day grain) serves the true date columns via roles. `dim_season` is a **shrunken conformed
+rollup** of `dim_date` — build it FROM dim_date (group by year, then add era attributes)
+so shared attributes (decade, year number) can never drift between the two.
+**Never** join a year-grain fact to dim_date via a fabricated Jan-1 date key.
+**Partial dates**: birthYear/Month/Day are independently nullable (Negro League, 1800s
+players) — set the date FK only when all three parts exist, else point to the unknown
+member (`date_key = -1`); keep `birth_year` as a plain attribute on dim_player so
+year-grain analysis never needs the outrigger. Never fabricate `-01-01` dates.
 
 ## Stretch menu (no new techniques — pull on demand)
 

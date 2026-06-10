@@ -1,15 +1,15 @@
 with source as (
 
-    select * from {{ ref('batting') }}
+    select * from {{ ref('batting_post') }}
 
 ),
 
 renamed as (
 
     select
-        "playerID" as player_id,
         "yearID" as year_id,
-        "stint" as stint,
+        "round" as round,
+        "playerID" as player_id,
         "teamID" as team_id,
         "lgID" as league_id,
         "G" as games,

@@ -1,0 +1,116 @@
+version: 2
+
+models:
+  - name: stg_people
+    description: Player biographical and biometric information
+    columns:
+      - name: player_id
+        description: Natural key for a player; links all player-level tables
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_batting
+    description: Regular-season batting statistics by player, year, team, and stint
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [player_id, year_id, team_id, stint]
+
+  - name: stg_pitching
+    description: Regular-season pitching statistics by player, year, team, and stint
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [player_id, year_id, team_id, stint]
+
+  - name: stg_fielding
+    description: Regular-season fielding statistics by player, year, team, stint, and position
+
+  - name: stg_fielding_of
+    description: Outfield position breakdown (LF/CF/RF) for fielding records, through 1955
+
+  - name: stg_fielding_of_split
+    description: LF/CF/RF game-played splits for all years
+
+  - name: stg_fielding_post
+    description: Postseason fielding statistics
+
+  - name: stg_appearances
+    description: Games played by position, by player, year, and team
+
+  - name: stg_teams
+    description: Team standings and season-level stats by year
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [team_id, year_id]
+
+  - name: stg_teams_franchises
+    description: Franchise lookup mapping team IDs to franchise IDs and names
+    columns:
+      - name: franchise_id
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_teams_half
+    description: Team standings split by first/second half of season
+
+  - name: stg_managers
+    description: Manager records by year, team, and in-season order
+
+  - name: stg_managers_half
+    description: Manager records split by first/second half of season
+
+  - name: stg_batting_post
+    description: Postseason batting statistics by player, year, and round
+
+  - name: stg_pitching_post
+    description: Postseason pitching statistics by player, year, and round
+
+  - name: stg_series_post
+    description: Postseason series results
+
+  - name: stg_allstar_full
+    description: All-Star game appearances by player and year
+
+  - name: stg_awards_players
+    description: Awards won by players
+
+  - name: stg_awards_share_players
+    description: Award voting results (e.g. MVP, Cy Young) for players
+
+  - name: stg_awards_managers
+    description: Awards won by managers
+
+  - name: stg_awards_share_managers
+    description: Award voting results for managers
+
+  - name: stg_hall_of_fame
+    description: Hall of Fame voting results by player and ballot year
+
+  - name: stg_college_playing
+    description: Mapping of players to the colleges they attended (data through 2014)
+
+  - name: stg_schools
+    description: College/school lookup with location information (data through 2014)
+    columns:
+      - name: school_id
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_salaries
+    description: Player salaries by year and team (data covers 1985-2016 only)
+
+  - name: stg_parks
+    description: Ballpark lookup with names and locations
+    columns:
+      - name: park_id
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_home_games
+    description: Home games played by team and ballpark per season, with attendance
