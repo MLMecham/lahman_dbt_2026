@@ -1,62 +1,61 @@
 version: 2
 
 sources:
-  - name: moms_flower_shop
-    database: FLOWER_SHOP_DB
-    schema: "{{ target.schema }}"
+  - name: lahman
+    database: SNOWBEARAIR_DB
+    schema: PUBLIC_raw
     tables:
-      - name: raw_flower_orders
-        description: Raw flower order data
-        columns:
-          - name: order_id
-            data_tests: [unique, not_null]
-          - name: customer_id
-          - name: order_time
-          - name: order_value
-          - name: flowers_amount
-          - name: vase_amount
-          - name: chocolate_amount
-          - name: delivery_id
-          - name: platform
-
-      - name: raw_customers
-        description: Raw customer data
-        columns:
-          - name: id
-            data_tests: [unique, not_null]
-          - name: first_name
-          - name: last_name
-          - name: email
-            data_tests: [unique]
-          - name: gender
-          - name: address_id
-
-      - name: raw_addresses
-        description: Customer address data
-        columns:
-          - name: address_id
-            data_tests: [unique, not_null]
-          - name: full_address
-          - name: state
-          - name: city
-
-      - name: raw_website_events
-        description: Website and app interaction events
-        columns:
-          - name: event_id
-            data_tests: [unique, not_null]
-          - name: customer_id
-          - name: event_time
-          - name: event_name
-          - name: platform
-
-      - name: raw_marketing_campaign_events
-        description: Marketing campaign spend events
-        columns:
-          - name: event_id
-            data_tests: [unique, not_null]
-          - name: campaign_id
-          - name: campaign_name
-          - name: c_name
-          - name: event_time
-          - name: cost
+      - name: people
+        description: Player biographical and biometric information
+      - name: batting
+        description: Batting statistics by player, year, team, and stint
+      - name: pitching
+        description: Pitching statistics by player, year, team, and stint
+      - name: fielding
+        description: Fielding statistics by player, year, team, stint, and position
+      - name: fielding_of
+        description: Outfield position breakdown (LF/CF/RF) for fielding records
+      - name: fielding_of_split
+        description: Split outfield position breakdown for fielding records
+      - name: fielding_post
+        description: Postseason fielding statistics
+      - name: appearances
+        description: Number of games played by position, by player, year, and team
+      - name: teams
+        description: Team standings and season-level stats by year
+      - name: teams_franchises
+        description: Franchise lookup mapping team IDs to franchise IDs and names
+      - name: teams_half
+        description: Team standings split by first/second half of season
+      - name: managers
+        description: Manager records by year and team
+      - name: managers_half
+        description: Manager records split by first/second half of season
+      - name: batting_post
+        description: Postseason batting statistics
+      - name: pitching_post
+        description: Postseason pitching statistics
+      - name: series_post
+        description: Postseason series results
+      - name: allstar_full
+        description: All-Star game appearances by player and year
+      - name: awards_players
+        description: Awards won by players
+      - name: awards_share_players
+        description: Award voting results (e.g. MVP, Cy Young) for players
+      - name: awards_managers
+        description: Awards won by managers
+      - name: awards_share_managers
+        description: Award voting results for managers
+      - name: hall_of_fame
+        description: Hall of Fame voting results by player and year
+      - name: college_playing
+        description: Mapping of players to the colleges they attended
+      - name: schools
+        description: College/school lookup with location information
+      - name: salaries
+        description: Player salaries by year and team
+      - name: parks
+        description: Ballpark lookup with names and locations
+      - name: home_games
+        description: Number of home games played by team and ballpark per season

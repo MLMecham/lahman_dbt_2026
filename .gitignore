@@ -6,3 +6,8 @@ logs/
 resources.md
 .user.yml
 move/
+dbt_internal_packages/
+.venv/
+venv/
+__pycache__/
+.claude
